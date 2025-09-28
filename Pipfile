@@ -12,12 +12,14 @@ pytest-asyncio = "*"
 pytest-cov = "*"
 flake8 = "*"
 black = "*"
+autopep8 = "*"
 
 [scripts]
 test = "pytest -v"
 test-cov = "pytest -v --cov=."
 lint = "flake8 ."
 format = "black ."
+fix = "autopep8 --in-place --recursive ."
 
 [requires]
 python_version = "3.11"
