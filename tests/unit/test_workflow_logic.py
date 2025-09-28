@@ -3,7 +3,8 @@ import sys
 import os
 
 # Add parent directory to path for imports
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.insert(0, os.path.dirname(os.path.dirname(
+    os.path.dirname(os.path.abspath(__file__)))))
 
 from workflow import HelloAgentWorkflow  # noqa: E402
 from temporalio import workflow  # noqa: E402
