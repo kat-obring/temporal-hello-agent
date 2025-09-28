@@ -175,7 +175,109 @@ assert "🤖 Agent" in result
 - **Mock Issues**: Ensure mocks are async and properly await calls
 - **Retry Simulation**: Implement retry logic in mocks to match Temporal behavior
 
-## Next Steps for Enhancement
+## LinkedIn Content Creation AI Agent - Future Development
+
+### **Phase 1: Core Content Generation Workflow** 🎯
+
+**1. Enhanced Topic Research Activity**
+- Extend the current `web_search` to focus on trending topics in your industry
+- Add keyword research and competitor analysis
+- Include LinkedIn-specific trending topics and hashtags
+
+**2. Content Generation Activity**
+- Create a new `generate_content` activity that uses AI to write LinkedIn posts
+- Support different content types: thought leadership, industry insights, personal stories
+- Include hooks, value propositions, and calls-to-action
+
+**3. Content Optimization Activity**
+- Format content for LinkedIn's algorithm (character limits, hashtags, mentions)
+- Add engagement optimization (questions, polls, visual suggestions)
+- Include A/B testing variations
+
+### **Phase 2: User Experience & Workflow** 👤
+
+**4. Interactive Content Workflow**
+- Create a `LinkedInContentWorkflow` that guides users through content creation
+- Add approval steps and revision cycles
+- Include content preview and editing capabilities
+
+**5. Content Management System**
+- Store generated content with metadata (topics, performance, versions)
+- Add content calendar and scheduling
+- Include batch content generation for multiple posts
+
+### **Phase 3: Advanced Features** 🚀
+
+**6. LinkedIn API Integration**
+- Connect to LinkedIn API for direct posting
+- Add engagement tracking and analytics
+- Include audience insights and performance metrics
+
+**7. Smart Content Strategy**
+- Analyze your existing content performance
+- Suggest optimal posting times and content types
+- Include competitor analysis and trending topic alerts
+
+### **Phase 4: AI Enhancement** 🤖
+
+**8. Advanced AI Features**
+- Personal brand voice training
+- Industry-specific content templates
+- Multi-language content generation
+- Visual content suggestions (images, videos, carousels)
+
+## **Immediate Next Steps** (Recommended Implementation Order):
+
+1. **Create a new `LinkedInContentWorkflow`** that orchestrates:
+   - Topic research → Content generation → Optimization → User approval
+
+2. **Enhance the web search** to focus on LinkedIn-relevant topics:
+   - Industry trends, competitor content, trending hashtags
+   - LinkedIn-specific search queries
+
+3. **Add a content generation activity** that creates LinkedIn posts:
+   - Hook + Value + Story + Call-to-action structure
+   - Character count optimization (LinkedIn posts work best at 150-300 characters)
+   - Hashtag suggestions
+
+4. **Create a new starter script** for the LinkedIn content workflow
+
+### **Technical Implementation Notes:**
+
+**New Activities to Create:**
+- `research_linkedin_topics(query: str) -> List[Dict]` - Enhanced web search for LinkedIn content
+- `generate_linkedin_content(topic_data: List[Dict]) -> str` - AI content generation
+- `optimize_linkedin_content(content: str) -> Dict` - Format and optimize for LinkedIn
+- `schedule_linkedin_post(content: Dict) -> str` - Handle posting and scheduling
+
+**New Workflow:**
+```python
+@workflow.defn
+class LinkedInContentWorkflow:
+    @workflow.run
+    async def run(self, topic_query: str, content_type: str) -> Dict:
+        # Step 1: Research trending topics
+        topics = await workflow.execute_activity("research_linkedin_topics", topic_query)
+        
+        # Step 2: Generate content
+        content = await workflow.execute_activity("generate_linkedin_content", topics)
+        
+        # Step 3: Optimize for LinkedIn
+        optimized = await workflow.execute_activity("optimize_linkedin_content", content)
+        
+        # Step 4: User approval (could be manual or automated)
+        # Step 5: Schedule/post content
+        
+        return optimized
+```
+
+**Dependencies to Add:**
+- `openai` or similar for AI content generation
+- `linkedin-api` for LinkedIn integration
+- `schedule` for content scheduling
+- `pytz` for timezone handling
+
+## Next Steps for Enhancement (Original)
 - Add more sophisticated retry policies
 - Implement circuit breaker patterns
 - Add integration tests with real Temporal server
