@@ -5,6 +5,7 @@ from temporalio.client import Client
 from workflow import HelloAgentWorkflow
 from activities import simulate_llm_response
 
+
 async def main():
     client = await Client.connect("localhost:7233")
 

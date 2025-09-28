@@ -1,6 +1,7 @@
 import asyncio
 from temporalio.client import Client
 
+
 async def main():
     # Connect to the Temporal server
     client = await Client.connect("localhost:7233")
