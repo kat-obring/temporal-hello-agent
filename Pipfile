@@ -16,6 +16,8 @@ autopep8 = "*"
 
 [scripts]
 test = "pytest -v"
+test-unit = "pytest tests/unit/ -v"
+test-integration = "pytest tests/integration/ -v"
 test-cov = "pytest -v --cov=."
 lint = "flake8 ."
 format = "black ."

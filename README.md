@@ -32,10 +32,13 @@ This project showcases:
 
 ### Available Commands
 
-- `pipenv run test` - Run tests with verbose output
-- `pipenv run test-cov` - Run tests with coverage report
+- `pipenv run test` - Run all tests with verbose output
+- `pipenv run test-unit` - Run only unit tests
+- `pipenv run test-integration` - Run only integration tests
+- `pipenv run test-cov` - Run all tests with coverage report
 - `pipenv run lint` - Check code style with flake8
 - `pipenv run format` - Format code with black
+- `pipenv run fix` - Auto-fix whitespace issues
 
 ### Running the Application
 
@@ -74,9 +77,32 @@ temporal_hello_agent/
 
 ## Testing
 
-Run the test suite:
+### Test Types
+
+**Unit Tests** (`tests/unit/`):
+- Test individual activities and workflow logic
+- Use mocks to simulate Temporal behavior
+- Fast and don't require external dependencies
+
+**Integration Tests** (`tests/integration/`):
+- Test complete workflows with real Temporal runtime
+- Use `WorkflowEnvironment` for in-memory testing
+- Verify end-to-end behavior
+
+### Running Tests
+
 ```bash
+# Run all tests
 pipenv run test
+
+# Run only unit tests (fast)
+pipenv run test-unit
+
+# Run only integration tests
+pipenv run test-integration
+
+# Run with coverage
+pipenv run test-cov
 ```
 
-The tests verify that the activity function returns the expected response format.
+The tests verify retry logic, error handling, and expected response formats.
