@@ -1,0 +1,23 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+temporalio = "*"
+
+[dev-packages]
+pytest = "*"
+pytest-asyncio = "*"
+pytest-cov = "*"
+flake8 = "*"
+black = "*"
+
+[scripts]
+test = "pytest -v"
+test-cov = "pytest -v --cov=."
+lint = "flake8 ."
+format = "black ."
+
+[requires]
+python_version = "3.11"
