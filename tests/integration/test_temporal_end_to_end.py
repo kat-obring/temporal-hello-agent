@@ -1,7 +1,5 @@
 import pytest
-import asyncio
 from temporalio.testing import WorkflowEnvironment
-from temporalio.client import Client
 from temporalio.worker import Worker
 
 from workflow import HelloAgentWorkflow
