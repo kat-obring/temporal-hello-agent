@@ -1,7 +1,6 @@
 from temporalio import workflow
 from temporalio.common import RetryPolicy
 from datetime import timedelta
-from typing import List, Dict
 
 
 @workflow.defn
@@ -10,7 +9,7 @@ class WebSearchAgentWorkflow:
     async def run(self, query: str) -> str:
         """Search the web for a query and return a summary of results."""
         print(f"🚀 Starting web search workflow for: {query}")
-        
+
         # Step 1: Search the web
         try:
             search_results = await workflow.execute_activity(
@@ -25,7 +24,7 @@ class WebSearchAgentWorkflow:
         except Exception as e:
             print(f"❌ Web search failed: {e}")
             return f"❌ Search failed for '{query}': {str(e)}"
-        
+
         # Step 2: Summarize the results
         try:
             summary = await workflow.execute_activity(
@@ -41,7 +40,8 @@ class WebSearchAgentWorkflow:
             return summary
         except Exception as e:
             print(f"❌ Summary failed: {e}")
-            return f"❌ Search completed but summary failed for '{query}': {str(e)}"
+            return (f"❌ Search completed but summary failed for '{query}': "
+                    f"{str(e)}")
 
 
 # Keep the old workflow for backward compatibility

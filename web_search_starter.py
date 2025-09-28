@@ -9,7 +9,7 @@ async def main():
 
     # Get search query from user
     query = input("🔍 What would you like to search for? ").strip()
-    
+
     if not query:
         print("❌ Please enter a search query.")
         return
@@ -20,7 +20,7 @@ async def main():
         result = await client.execute_workflow(
             "WebSearchAgentWorkflow",           # workflow to call
             query,                              # search query
-            id=f"web-search-{int(time.time())}", # unique ID
+            id=f"web-search-{int(time.time())}",  # unique ID
             task_queue="agent-task-queue",      # must match worker
         )
 

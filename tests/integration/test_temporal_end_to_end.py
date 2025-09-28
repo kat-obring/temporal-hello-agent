@@ -3,7 +3,8 @@ from temporalio.testing import WorkflowEnvironment
 from temporalio.worker import Worker
 
 from workflow import HelloAgentWorkflow, WebSearchAgentWorkflow
-from activities import simulate_llm_response, flaky_activity, web_search, summarize_results
+from activities import (simulate_llm_response, flaky_activity,
+                        web_search, summarize_results)
 
 
 @pytest.mark.asyncio
@@ -17,7 +18,8 @@ async def test_workflow_end_to_end_with_retries():
             client,
             task_queue="test-task-queue",
             workflows=[HelloAgentWorkflow, WebSearchAgentWorkflow],
-            activities=[simulate_llm_response, flaky_activity, web_search, summarize_results],
+            activities=[simulate_llm_response, flaky_activity,
+                        web_search, summarize_results],
         )
 
         async with worker:

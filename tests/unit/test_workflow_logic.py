@@ -111,7 +111,7 @@ async def test_web_search_workflow_success():
     # Track activity calls
     web_search_call_count = 0
     summarize_call_count = 0
-    
+
     async def mock_web_search(query: str):
         nonlocal web_search_call_count
         web_search_call_count += 1
@@ -123,16 +123,17 @@ async def test_web_search_workflow_success():
                 "source": "Test Source"
             }
         ]
-    
+
     async def mock_summarize_results(args: tuple):
         nonlocal summarize_call_count
         summarize_call_count += 1
         query, search_results = args
-        return f"🔍 **Search Results for: {query}**\nFound {len(search_results)} results."
-    
+        return (f"🔍 **Search Results for: {query}**\n"
+                f"Found {len(search_results)} results.")
+
     # Mock workflow.execute_activity
     orig_execute_activity = workflow.execute_activity
-    
+
     async def mock_execute_activity(activity_name, *args, **kwargs):
         if activity_name == "web_search":
             return await mock_web_search(*args)
@@ -140,23 +141,23 @@ async def test_web_search_workflow_success():
             return await mock_summarize_results(*args)
         else:
             raise ValueError(f"Unknown activity: {activity_name}")
-    
+
     workflow.execute_activity = mock_execute_activity
-    
+
     try:
         # Test the workflow
         query = "Python Temporal"
         result = await WebSearchAgentWorkflow().run(query)
-        
+
         # Verify the result
         assert isinstance(result, str)
         assert query in result
         assert "Search Results for:" in result
-        
+
         # Verify activities were called
         assert web_search_call_count == 1
         assert summarize_call_count == 1
-        
+
     finally:
         # Restore the original function
         workflow.execute_activity = orig_execute_activity
@@ -168,21 +169,22 @@ async def test_web_search_workflow_search_failure():
     # Track activity calls
     web_search_call_count = 0
     summarize_call_count = 0
-    
+
     async def mock_web_search_failure(query: str):
         nonlocal web_search_call_count
         web_search_call_count += 1
         raise Exception("Network error")
-    
+
     async def mock_summarize_results(args: tuple):
         nonlocal summarize_call_count
         summarize_call_count += 1
         query, search_results = args
-        return f"🔍 **Search Results for: {query}**\nFound {len(search_results)} results."
-    
+        return (f"🔍 **Search Results for: {query}**\n"
+                f"Found {len(search_results)} results.")
+
     # Mock workflow.execute_activity
     orig_execute_activity = workflow.execute_activity
-    
+
     async def mock_execute_activity(activity_name, *args, **kwargs):
         if activity_name == "web_search":
             return await mock_web_search_failure(*args)
@@ -190,24 +192,24 @@ async def test_web_search_workflow_search_failure():
             return await mock_summarize_results(*args)
         else:
             raise ValueError(f"Unknown activity: {activity_name}")
-    
+
     workflow.execute_activity = mock_execute_activity
-    
+
     try:
         # Test the workflow
         query = "Python Temporal"
         result = await WebSearchAgentWorkflow().run(query)
-        
+
         # Verify the error result
         assert isinstance(result, str)
         assert "Search failed" in result
         assert query in result
         assert "Network error" in result
-        
+
         # Verify only web search was called (summarize should not be called)
         assert web_search_call_count == 1
         assert summarize_call_count == 0
-        
+
     finally:
         # Restore the original function
         workflow.execute_activity = orig_execute_activity
@@ -219,7 +221,7 @@ async def test_web_search_workflow_summarize_failure():
     # Track activity calls
     web_search_call_count = 0
     summarize_call_count = 0
-    
+
     async def mock_web_search(query: str):
         nonlocal web_search_call_count
         web_search_call_count += 1
@@ -231,15 +233,15 @@ async def test_web_search_workflow_summarize_failure():
                 "source": "Test Source"
             }
         ]
-    
+
     async def mock_summarize_failure(args: tuple):
         nonlocal summarize_call_count
         summarize_call_count += 1
         raise Exception("Summary processing error")
-    
+
     # Mock workflow.execute_activity
     orig_execute_activity = workflow.execute_activity
-    
+
     async def mock_execute_activity(activity_name, *args, **kwargs):
         if activity_name == "web_search":
             return await mock_web_search(*args)
@@ -247,24 +249,24 @@ async def test_web_search_workflow_summarize_failure():
             return await mock_summarize_failure(*args)
         else:
             raise ValueError(f"Unknown activity: {activity_name}")
-    
+
     workflow.execute_activity = mock_execute_activity
-    
+
     try:
         # Test the workflow
         query = "Python Temporal"
         result = await WebSearchAgentWorkflow().run(query)
-        
+
         # Verify the error result
         assert isinstance(result, str)
         assert "Search completed but summary failed" in result
         assert query in result
         assert "Summary processing error" in result
-        
+
         # Verify both activities were called
         assert web_search_call_count == 1
         assert summarize_call_count == 1
-        
+
     finally:
         # Restore the original function
         workflow.execute_activity = orig_execute_activity
