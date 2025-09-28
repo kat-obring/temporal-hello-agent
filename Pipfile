@@ -5,6 +5,8 @@ name = "pypi"
 
 [packages]
 temporalio = "*"
+requests = "*"
+beautifulsoup4 = "*"
 
 [dev-packages]
 pytest = "*"

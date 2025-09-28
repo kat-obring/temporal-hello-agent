@@ -2,8 +2,8 @@ import pytest
 from temporalio.testing import WorkflowEnvironment
 from temporalio.worker import Worker
 
-from workflow import HelloAgentWorkflow
-from activities import simulate_llm_response, flaky_activity
+from workflow import HelloAgentWorkflow, WebSearchAgentWorkflow
+from activities import simulate_llm_response, flaky_activity, web_search, summarize_results
 
 
 @pytest.mark.asyncio
@@ -12,12 +12,12 @@ async def test_workflow_end_to_end_with_retries():
     async with await WorkflowEnvironment.start_time_skipping() as env:
         client = env.client
 
-        # Start a worker with our workflow + activities
+        # Start a worker with our workflows + activities
         worker = Worker(
             client,
             task_queue="test-task-queue",
-            workflows=[HelloAgentWorkflow],
-            activities=[simulate_llm_response, flaky_activity],
+            workflows=[HelloAgentWorkflow, WebSearchAgentWorkflow],
+            activities=[simulate_llm_response, flaky_activity, web_search, summarize_results],
         )
 
         async with worker:

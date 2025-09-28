@@ -2,8 +2,8 @@ import asyncio
 from temporalio.worker import Worker
 from temporalio.client import Client
 
-from workflow import HelloAgentWorkflow
-from activities import simulate_llm_response, flaky_activity
+from workflow import HelloAgentWorkflow, WebSearchAgentWorkflow
+from activities import simulate_llm_response, flaky_activity, web_search, summarize_results
 
 
 async def main():
@@ -12,8 +12,8 @@ async def main():
     worker = Worker(
         client,
         task_queue="agent-task-queue",
-        workflows=[HelloAgentWorkflow],
-        activities=[simulate_llm_response, flaky_activity],
+        workflows=[HelloAgentWorkflow, WebSearchAgentWorkflow],
+        activities=[simulate_llm_response, flaky_activity, web_search, summarize_results],
     )
     await worker.run()
 
