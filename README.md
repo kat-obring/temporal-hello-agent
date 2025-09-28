@@ -79,5 +79,4 @@ Run the test suite:
 pipenv run test
 ```
 
-The tests verify that the activity function returns the expected response format. 
-Testy testing
+The tests verify that the activity function returns the expected response format.
