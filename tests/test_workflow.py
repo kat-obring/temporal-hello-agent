@@ -70,7 +70,7 @@ async def test_workflow_with_retry_logic():
             # Simulate retry behavior - call the function multiple times
             retry_policy = kwargs.get('retry_policy')
             max_attempts = retry_policy.maximum_attempts if retry_policy else 3
-            
+
             for attempt in range(max_attempts):
                 try:
                     return await mock_flaky_activity(*args)
