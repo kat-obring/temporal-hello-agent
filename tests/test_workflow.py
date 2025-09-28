@@ -65,11 +65,22 @@ async def test_workflow_with_retry_logic():
     # Mock workflow.execute_activity to route to our test functions
     orig_execute_activity = workflow.execute_activity
 
-    def mock_execute_activity(activity_name, *args, **kwargs):
+    async def mock_execute_activity(activity_name, *args, **kwargs):
         if activity_name == "flaky_activity":
-            return mock_flaky_activity(*args)
+            # Simulate retry behavior - call the function multiple times
+            retry_policy = kwargs.get('retry_policy')
+            max_attempts = retry_policy.maximum_attempts if retry_policy else 3
+            
+            for attempt in range(max_attempts):
+                try:
+                    return await mock_flaky_activity(*args)
+                except Exception as e:
+                    if attempt == max_attempts - 1:  # Last attempt
+                        raise e
+                    # Continue to next attempt (simulating retry)
+                    continue
         elif activity_name == "simulate_llm_response":
-            return mock_successful_activity(*args)
+            return await mock_successful_activity(*args)
         else:
             raise ValueError(f"Unknown activity: {activity_name}")
 
@@ -83,7 +94,7 @@ async def test_workflow_with_retry_logic():
         assert "🤖 Agent" in result
 
         # Verify flaky activity was called (should fail after retries)
-        assert flaky_call_count > 0
+        assert flaky_call_count >= 3  # should be retried at least 3 times
 
         # Verify successful activity was called
         assert successful_call_count == 1
