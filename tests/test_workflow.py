@@ -51,20 +51,20 @@ async def test_workflow_with_retry_logic():
     # Track how many times activities are called
     flaky_call_count = 0
     successful_call_count = 0
-    
+
     async def mock_flaky_activity(name: str) -> str:
         nonlocal flaky_call_count
         flaky_call_count += 1
         raise RuntimeError("Simulated LLM failure!")
-    
+
     async def mock_successful_activity(name: str) -> str:
         nonlocal successful_call_count
         successful_call_count += 1
         return f"🤖 Agent {name} says: 'Let me look that up for you...'"
-    
+
     # Mock workflow.execute_activity to route to our test functions
     orig_execute_activity = workflow.execute_activity
-    
+
     def mock_execute_activity(activity_name, *args, **kwargs):
         if activity_name == "flaky_activity":
             return mock_flaky_activity(*args)
@@ -72,22 +72,22 @@ async def test_workflow_with_retry_logic():
             return mock_successful_activity(*args)
         else:
             raise ValueError(f"Unknown activity: {activity_name}")
-    
+
     workflow.execute_activity = mock_execute_activity
-    
+
     try:
         result = await HelloAgentWorkflow().run("Neo")
-        
+
         # Verify the result
         assert "Neo" in result
         assert "🤖 Agent" in result
-        
+
         # Verify flaky activity was called (should fail after retries)
         assert flaky_call_count > 0
-        
+
         # Verify successful activity was called
         assert successful_call_count == 1
-        
+
     finally:
         # Restore the original function
         workflow.execute_activity = orig_execute_activity
