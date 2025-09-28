@@ -5,9 +5,14 @@ A simple Temporal workflow example that demonstrates an AI agent simulation usin
 ## Overview
 
 This project showcases:
-- **Workflow**: `HelloAgentWorkflow` - Orchestrates the agent interaction
-- **Activity**: `simulate_llm_response` - Simulates an LLM response with a delay
-- **Client**: `starter.py` - Triggers workflow executions
+- **Workflows**: 
+  - `HelloAgentWorkflow` - Simple agent interaction with retry logic
+  - `WebSearchAgentWorkflow` - Web search and result summarization
+- **Activities**: 
+  - `simulate_llm_response` - Simulates an LLM response with a delay
+  - `web_search` - Searches the web using DuckDuckGo API
+  - `summarize_results` - Formats search results into readable summaries
+- **Clients**: `hello_starter.py` and `web_search_starter.py` - Trigger workflow executions
 - **Worker**: `worker.py` - Processes workflow and activity tasks
 
 ## Prerequisites
@@ -47,9 +52,13 @@ This project showcases:
    pipenv run python worker.py
    ```
 
-2. **Run the starter** (in another terminal):
+2. **Run a starter** (in another terminal):
    ```bash
-   pipenv run python starter.py
+   # For the simple hello workflow:
+   pipenv run python hello_starter.py
+   
+   # For the web search workflow:
+   pipenv run python web_search_starter.py
    ```
 
 The worker will process the workflow and return: `🤖 Agent Neo says: 'Let me look that up for you...'`
@@ -61,7 +70,8 @@ temporal_hello_agent/
 ├── activities.py      # Activity functions
 ├── workflow.py        # Workflow definitions
 ├── worker.py          # Temporal worker
-├── starter.py         # Client to trigger workflows
+├── hello_starter.py   # Client for simple hello workflow
+├── web_search_starter.py # Client for web search workflow
 ├── test_activities.py # Tests for activities
 ├── Pipfile           # Dependencies
 └── README.md         # This file
@@ -69,7 +79,7 @@ temporal_hello_agent/
 
 ## How It Works
 
-1. The `starter.py` client sends a workflow execution request to Temporal
+1. The starter clients (`hello_starter.py` or `web_search_starter.py`) send workflow execution requests to Temporal
 2. The `worker.py` picks up the workflow task and starts executing `HelloAgentWorkflow`
 3. The workflow calls the `simulate_llm_response` activity
 4. The activity simulates thinking time and returns a response
