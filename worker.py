@@ -3,7 +3,7 @@ from temporalio.worker import Worker
 from temporalio.client import Client
 
 from workflow import HelloAgentWorkflow
-from activities import simulate_llm_response
+from activities import simulate_llm_response, flaky_activity
 
 
 async def main():
@@ -13,7 +13,7 @@ async def main():
         client,
         task_queue="agent-task-queue",
         workflows=[HelloAgentWorkflow],
-        activities=[simulate_llm_response],
+        activities=[simulate_llm_response, flaky_activity],
     )
     await worker.run()
 

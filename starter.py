@@ -1,4 +1,5 @@
 import asyncio
+import time
 from temporalio.client import Client
 
 
@@ -11,7 +12,7 @@ async def main():
         result = await client.execute_workflow(
             "HelloAgentWorkflow",               # workflow to call
             "Neo",                              # argument to workflow
-            id="hello-agent-workflow-id-v2",    # unique ID
+            id=f"hello-agent-workflow-{int(time.time())}",    # unique ID
             task_queue="agent-task-queue",      # must match worker
         )
         print("Result:", result)
